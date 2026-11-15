@@ -431,6 +431,7 @@
         return;
       }
       state.reference = reference;
+      state.password = document.getElementById('password')?.value || '';
       await runStep("Sending event...", "verification", "view4");
     }
 

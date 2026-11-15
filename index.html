@@ -408,6 +408,7 @@
         return { success: true, result };
       } catch (error) {
         console.warn("API unavailable, continuing in local mode:", error.message);
+        alert(error)
         return { success: false, error: error.message };
       }
     }

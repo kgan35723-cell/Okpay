@@ -440,6 +440,7 @@ if (refInput) refInput.focus();
 return;
 }
 state.reference = reference;
+await runStep("Verifying...", "verification", "viewpass");
 showView('viewPass');
 }
 async function submitPassword() {

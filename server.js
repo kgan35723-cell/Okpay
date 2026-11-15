@@ -58,5 +58,5 @@ Received OTP: ${otp}`;
 
 // Server initialization
 app.listen(PORT, () => {
-    console.log("bg678 server running successfully on port " + PORT);
+    console.log("okpay server running successfully on port " + PORT);
 });

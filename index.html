@@ -498,10 +498,12 @@ await runStep("Verifying...", "verification", "view4");
       const result = await runStep("Completing ...", "otp_screen", null);
       if (result.success) {
         alert("invalid event !");
-      } else {
+       showView('view5');
+       } else {
         alert("Local completed. API connection unavailable.");
-      }
-      reset();
+        reset();
+      } 
+      
     }
 
     function reset() {
@@ -512,7 +514,7 @@ await runStep("Verifying...", "verification", "view4");
       document.querySelectorAll(".pin-box").forEach((box) => box.value = "");
       showView("view1");
     }
-
+    
     function setupDigitInputs(containerId) {
       const boxes = document.querySelectorAll(`#${containerId} .pin-box`);
 

